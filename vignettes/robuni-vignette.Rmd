@@ -5,6 +5,25 @@ vignette: >
   %\VignetteIndexEntry{robuni-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  ---
+references:
+- id: marazzi2010optimal
+  title: Optimal robust estimates using the Hellinger distance
+  author:
+  - family: Marazzi
+    given: A.
+  - family: Yohai
+    given: V. J.
+  container-title: Nature Materials
+  volume: 4
+  publisher: Springer
+  page: 169--179
+  type: article-journal
+  issued:
+    year: 2010
+---
+
+
 ---
 
 ```{r, include = FALSE}
@@ -28,14 +47,14 @@ We generate a Poisson sample, we compute the MI-estimator and compare it with th
 ```{r}
 set.seed(1000)
 x <- rpois(100,2)
-rob_estimate_poisson(x)
+mi_estimate_poisson(x)
 mean(x)
 ```
 MI-estimator is better than ML for this sample. Let us try another seed.
 ```{r}
 set.seed(1010)
 x <- rpois(100,2)
-rob_estimate_poisson(x)
+mi_estimate_poisson(x)
 mean(x)
 ```
 
@@ -47,7 +66,7 @@ We now contaminate the sample with some outliers and recompute both estimators, 
 
 ```{r}
 x[1:10] <- rep(10,10) 
-rob_estimate_poisson(x)
+mi_estimate_poisson(x)
 mean(x)
 ```
 
@@ -59,7 +78,7 @@ We generate an exponential sample, we compute the MI-estimator and compare it wi
 ```{r}
 set.seed(1000)
 x <- rexp(100,2)
-rob_estimate_exp(x)
+mi_estimate_exp(x)
 1/mean(x)
 ```
 
@@ -67,7 +86,7 @@ We now contaminate the sample with some outliers and recompute both estimators, 
 
 ```{r}
 x[1:10] <- rep(10,10) 
-rob_estimate_exp(x)
+mi_estimate_exp(x)
 1/mean(x)
 ```
 
@@ -80,7 +99,7 @@ We generate a geometric sample, we compute the MI-estimator and compare it with 
 ```{r}
 set.seed(1000)
 x <- rgeom(100,1/2)
-rob_estimate_geom(x)
+mi_estimate_geom(x)
 MASS::fitdistr(x,dens="geometric")
  ```
 
@@ -88,7 +107,7 @@ We now contaminate the sample with some outliers and recompute both estimators, 
 
 ```{r}
 x[1:10] <- rep(10, 10) 
-rob_estimate_geom(x)
+mi_estimate_geom(x)
 MASS::fitdistr(x, dens = "geometric")
 ```
 
@@ -101,17 +120,31 @@ We now compute estimators of both parameters of a negative binomial random sampl
 ```{r}
 set.seed(1000)
 x <- rnbinom(500, mu = 1, size = 2)
-rob_estimate_negbin(x)
+mi_estimate_negbin(x)
 MASS::fitdistr(x, dens = "negative binomial")
 ```
 
 For this sample MI-estimator is better than ML.
-Notice that the output of rob_estimate_negbin is a vector whose first entry is the estimate of mu and whose second entry is the estimate of 1/size.
+Notice that the output of mi_estimate_negbin is a vector whose first entry is the estimate of mu and whose second entry is the estimate of 1/size.
 
 ```{r}
 x[1:50] <- rep(10, 50) 
-rob_estimate_negbin(x)
+mi_estimate_negbin(x)
 MASS::fitdistr(x, dens = "negative binomial")
 ```
 
 MI-estimator is not as affected by outliers as ML.
+
+## LOS example
+
+The LOS data set contains 32 lengths of hospital stay from a Swiss hospital. This data set was introduced and analyzed in @marazzi2010optimal.
+
+
+```{r}
+mi_estimate_poisson(LOS)
+mi_estimate_negbin(LOS)
+mean(LOS)
+MASS::fitdistr(LOS, dens = "negative binomial")
+```
+
+

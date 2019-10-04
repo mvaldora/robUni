@@ -53,11 +53,11 @@ score_mi_negbin <- function(par, x) {
 #'   library(MASS)
 #'   x <- rnbinom(100,mu=2,size=1)
 #'   MASS::fitdistr(x,dens="negative binomial")
-#'   rob_estimate_negbin(x)
+#'   mi_estimate_negbin(x)
 #' @return The estimated vector of parameters. The first entry is the mean and the second is the dispersion parameter, that equals 1/size.
 #' @export
 
-rob_estimate_negbin <- function(x, start = NULL) {
+mi_estimate_negbin <- function(x, start = NULL) {
   if (is.null(start)) {
     m_estim <- MASS::rlm(x ~ 1)
     startmu <- max(m_estim$coefficients, 0.1)

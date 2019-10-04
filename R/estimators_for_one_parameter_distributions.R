@@ -20,11 +20,11 @@ psi_pois_s <- function(mu, mstr) {
 #' @param x A vector of univariate observations
 #' @examples
 #'   x <- rpois(100,0.2)
-#'   rob_estimate_poisson(x)
+#'   mi_estimate_poisson(x)
 #'   MASS::fitdistr(x, dens="Poisson")
 #' @return The estimated parameter of the Poisson distribution
 #' @export
-rob_estimate_poisson <- function(x) {
+mi_estimate_poisson <- function(x) {
     if (max(x) == 0)
     est_mi <- 0
   else
@@ -54,11 +54,11 @@ psi_exp_s <- function(lambda, mstr) {
 #' @param x A vector of univariate observations
 #' @examples
 #'   x <- rexp(50,2)
-#'   rob_estimate_exp(x)
+#'   mi_estimate_exp(x)
 #'   MASS::fitdistr(x,dens="exponential")
 #' @return The estimated parameter of the exponential distribution
 #' @export
-rob_estimate_exp <- function(x) {
+mi_estimate_exp <- function(x) {
   if (max(x) == 0)
     est_mi <- 0
   else
@@ -89,11 +89,11 @@ psi_geom_s <- function(mu, mstr) {
 #' @param x A vector of univariate observations
 #' @examples
 #'   x <- rgeom(50,1/2)
-#'   rob_estimate_geom(x)
+#'   mi_estimate_geom(x)
 #'   MASS::fitdistr(x,dens="geometric")
 #' @return The estimated parameter of the Poisson distribution
 #' @export
-rob_estimate_geom <- function(x) {
+mi_estimate_geom <- function(x) {
   if (max(x) == 0)
     est_mi <-
     0
@@ -129,12 +129,12 @@ psi_binom_s <- function(mstr, n, p) {
 #' @examples
 #'   n<-3
 #'   x <- rbinom(20,n,0.1)
-#'   rob_estimate_binom(x,n)
+#'   mi_estimate_binom(x,n)
 #'   mean(x)/n
 #' @return The estimated parameter of the Poisson distribution
 #' @export
 
-rob_estimate_binom <- function(x, n) {
+mi_estimate_binom <- function(x, n) {
   est_mi <- stats::uniroot(psi_binom_s, c(0, 1), mstr = x, n = n)$root
   est_mi
 }
