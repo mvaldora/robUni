@@ -1,0 +1,117 @@
+---
+title: "Package robuni-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{robuni-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette you will learn how to use robuni package to compute MI-estimators. MI-estimators are robust estimators for univariate distributions.
+
+We first load the package
+
+```{r setup}
+library(robuni)
+```
+
+## Poisson
+
+We generate a Poisson sample, we compute the MI-estimator and compare it with the maximum likelihood (ML) estimator, that is the mean.
+```{r}
+set.seed(1000)
+x <- rpois(100,2)
+rob_estimate_poisson(x)
+mean(x)
+```
+MI-estimator is better than ML for this sample. Let us try another seed.
+```{r}
+set.seed(1010)
+x <- rpois(100,2)
+rob_estimate_poisson(x)
+mean(x)
+```
+
+
+MI-estimator is highly efficient in the Poisson case. 
+
+
+We now contaminate the sample with some outliers and recompute both estimators, MI and ML.
+
+```{r}
+x[1:10] <- rep(10,10) 
+rob_estimate_poisson(x)
+mean(x)
+```
+
+Notice that ML estimator is much more affected by the outliers than MI.
+
+## Exponential
+
+We generate an exponential sample, we compute the MI-estimator and compare it with the maximum likelihood (ML) estimator.
+```{r}
+set.seed(1000)
+x <- rexp(100,2)
+rob_estimate_exp(x)
+1/mean(x)
+```
+
+We now contaminate the sample with some outliers and recompute both estimators, MI and ML.
+
+```{r}
+x[1:10] <- rep(10,10) 
+rob_estimate_exp(x)
+1/mean(x)
+```
+
+Notice that ML estimator is much more affected by the outliers than MI.
+
+
+## Geometric
+
+We generate a geometric sample, we compute the MI-estimator and compare it with the maximum likelihood (ML) estimator.
+```{r}
+set.seed(1000)
+x <- rgeom(100,1/2)
+rob_estimate_geom(x)
+MASS::fitdistr(x,dens="geometric")
+ ```
+
+We now contaminate the sample with some outliers and recompute both estimators, MI and ML.
+
+```{r}
+x[1:10] <- rep(10, 10) 
+rob_estimate_geom(x)
+MASS::fitdistr(x, dens = "geometric")
+```
+
+Notice that ML estimator is much more affected by the outliers than MI.
+
+## Negative binomial
+
+We now compute estimators of both parameters of a negative binomial random sample.
+
+```{r}
+set.seed(1000)
+x <- rnbinom(500, mu = 1, size = 2)
+rob_estimate_negbin(x)
+MASS::fitdistr(x, dens = "negative binomial")
+```
+
+For this sample MI-estimator is better than ML.
+Notice that the output of rob_estimate_negbin is a vector whose first entry is the estimate of mu and whose second entry is the estimate of 1/size.
+
+```{r}
+x[1:50] <- rep(10, 50) 
+rob_estimate_negbin(x)
+MASS::fitdistr(x, dens = "negative binomial")
+```
+
+MI-estimator is not as affected by outliers as ML.
